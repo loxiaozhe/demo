@@ -1,7 +1,8 @@
 {
     "version": "1.8.0",
     "compilerOptions": {
-        "outDir": "build/compiled",
+        "outDir": "dist",
+        "rootDir": "src",
         "lib": [ "es6" ],
         "target": "es5",
         "module": "commonjs",

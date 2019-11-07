@@ -1,8 +1,8 @@
 {
     "defaultSeverity": "error",
-    "extend": [ "tslint-config-prettier" ], // 继承 tslint-config-prettier
+    "extend": [ "tslint-config-prettier" ], 
     "linterOptions": {
-        "exclude": [ "**/node_modules/**" ]  // 排除 node_modules
+        "exclude": [ "**/node_modules/**" ]  
     },
     "jsRules": {
         "no-unused-expression": true
