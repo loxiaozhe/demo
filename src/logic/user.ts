@@ -7,13 +7,12 @@
  *
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
-import { Context } from 'koa';
-export class User {
-    findUser(ctx: Context): void {
-        ctx.body = { name: '张三', age: 10 };
+export class UserLogic {
+    async findUserByID(id: string): Promise<{ [name: string]: unknown }> {
+        return Promise.resolve({ name: '张三', age: 10 });
     }
 
-    createUser(ctx: Context): void {
-        ctx.body = { name: '张三', age: 10, success: true };
+    async createUser(): Promise<{ [name: string]: unknown }> {
+        return Promise.resolve({ name: '张三', age: 10, success: true });
     }
 }
