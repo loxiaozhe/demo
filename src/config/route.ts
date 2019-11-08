@@ -8,6 +8,7 @@
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
 import { controller } from '../controller/index';
+import { IndexMiddleware } from '../middleware';
 /**
  * **routes数组定义说明**
  * @param {string} path 请求地址
@@ -19,13 +20,13 @@ export const routes = [
     {
         path: '/user/findOne',
         method: 'GET',
-        middleware: [''],
+        middleware: IndexMiddleware.sessionMiddleware,
         fn: controller.user.findUser
     },
     {
         path: '/user/create',
         method: 'POST',
-        middleware: [''],
+        middleware: IndexMiddleware.sessionMiddleware,
         fn: controller.user.createUser
     }
 ];
