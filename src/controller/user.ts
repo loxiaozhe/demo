@@ -1,11 +1,29 @@
 import { Context } from 'koa';
-import { logic } from '../logic/index';
+import { logic } from '../logic';
 export class UserController {
-    async findUser(ctx: Context): Promise<any> {
-        ctx.body = await logic.user.findUserByID('aaaaa');
+    /**
+     * **获取用户**
+     * @param ctx 上下文
+     * @returns {Promise<void>}
+     */
+    async findUser(ctx: Context): Promise<void> {
+        ctx.body = await logic.user.findUserByID(ctx.user.id);
     }
-
-    async createUser(ctx: Context): Promise<any> {
+    /**
+     * **创建用户**
+     * @param ctx 上下文
+     * @returns {Promise<void>}
+     */
+    async createUser(ctx: Context): Promise<void> {
         ctx.body = await logic.user.createUser();
+    }
+    /**
+     * **用户登录**
+     * @param ctx 上下文
+     * @returns {Promise<void>}
+     */
+    async login(ctx: Context): Promise<void> {
+        const { id, pass } = ctx.request.body;
+        ctx.body = await logic.user.login(id, pass);
     }
 }

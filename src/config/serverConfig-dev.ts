@@ -9,7 +9,16 @@
  */
 export const serverConfig = {
     /**
-     * @summary 定义服务器启动端口 3000
+     * **定义服务器配置**
+     * @param prot 启动端口
+     * @param jwt.secret token密钥
+     * @param jwt.path 过滤token验证路径
+     * @param jwt.expiresIn 超时时间
      */
-    prot: 3000
+    prot: 3000,
+    jwt: {
+        secret: 'koa-demo',
+        path: [/^\/user\/login/],
+        expiresIn: '25s'
+    }
 };

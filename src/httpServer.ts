@@ -8,8 +8,9 @@
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
 import * as Koa from 'koa';
-import * as Session from 'koa-session';
 import * as Router from 'koa-router';
+import * as Jwt from 'koa-jwt';
+import * as bodyparser from 'koa-bodyparser';
 import { serverConfig } from './config/serverConfig-dev';
 import { routes } from './config/route';
 import { IndexMiddleware } from './middleware';
@@ -20,18 +21,7 @@ export class HttpServer {
     static creatServer(): void {
         const app = new Koa();
         const route = new Router();
-        const CONFIG = {
-            key: 'koa:sess' /** (string) cookie key (default is koa:sess) */,
-            /** (number || 'session') maxAge in ms (default is 1 days) */
-            /** 'session' will result in a cookie that expires when session/browser is closed */
-            /** Warning: If a session cookie is stolen, this cookie will never expire */
-            maxAge: 86400000,
-            overwrite: true /** (boolean) can overwrite or not (default true) */,
-            httpOnly: true /** (boolean) httpOnly or not (default true) */,
-            signed: true /** (boolean) signed or not (default true) */,
-            rolling: false /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */,
-            renew: false /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
-        };
+
         routes.forEach((item) => {
             if (item.method === 'GET') {
                 route.get(item.path, item.middleware, item.fn);
@@ -40,8 +30,9 @@ export class HttpServer {
                 route.post(item.path, item.middleware, item.fn);
             }
         });
-        app.use(IndexMiddleware.errorMiddleware)
-            .use(Session(CONFIG, app))
+        app.use(bodyparser())
+            .use(IndexMiddleware.errorMiddleware)
+            .use(Jwt({ secret: serverConfig.jwt.secret }).unless({ path: serverConfig.jwt.path }))
             .use(route.routes())
             .use(route.allowedMethods());
         app.listen(serverConfig.prot, '0.0.0.0');
