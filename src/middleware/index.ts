@@ -8,7 +8,8 @@
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
 import { Context } from 'koa';
-import { Util } from '../util';
+import { utils } from '../util';
+import { prop } from '@typegoose/typegoose';
 
 export class IndexMiddleware {
     /**
@@ -21,8 +22,15 @@ export class IndexMiddleware {
         try {
             await next();
         } catch (err) {
-            console.log(err);
-            ctx.body = { err: err.status == 401 ? '登录过期，请重新登录！' : err.message, code: err.status || 403 };
+            if (err.name === 'ValidationError') {
+                err.message = [];
+                for (let item of Object.keys(err.errors)) {
+                    err.message.push(err.errors[item].message);
+                }
+                ctx.body = { err: err.message, code: err.status || 403 };
+            } else {
+                ctx.body = { err: err.status == 401 ? '登录过期，请重新登录！' : err.message, code: err.status || 403 };
+            }
         }
     }
     /**
@@ -34,8 +42,7 @@ export class IndexMiddleware {
     static async userTokenMiddleware(ctx: Context, next: () => Promise<any>): Promise<void> {
         if (ctx.header && ctx.header.authorization) {
             const token = ctx.header.authorization;
-            const user = Util.parseToken(token);
-            console.log(user);
+            const user = utils.parseToken(token);
             ctx.user = user;
             await next();
         } else {

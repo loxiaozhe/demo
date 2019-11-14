@@ -7,7 +7,6 @@
  *
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
-import * as Jwt from 'koa-jwt';
 import { controller } from '../controller';
 import { IndexMiddleware } from '../middleware';
 /**

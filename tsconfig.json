@@ -1,17 +1,19 @@
 {
     "version": "1.8.0",
     "compilerOptions": {
+        "typeRoots" : ["./typings"],
         "outDir": "dist",
         "rootDir": "src",
-        "lib": [ "es6" ],
-        "target": "es6",
+        "lib": [ "es5" ],
+        "target": "ES5",
         "module": "commonjs",
         "moduleResolution": "node",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "sourceMap": false,
         "noImplicitAny": true,
-        "declaration": true
+        "declaration": false,
+        "removeComments":true
     },
     "exclude": [ "build", "node_modules" ]
 }
