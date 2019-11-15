@@ -27,9 +27,11 @@ export class IndexMiddleware {
                 for (let item of Object.keys(err.errors)) {
                     err.message.push(err.errors[item].message);
                 }
-                ctx.body = { err: err.message, code: err.status || 403 };
+                console.error(err);
+                ctx.body = { message: err.message, code: err.status || 403 };
             } else {
-                ctx.body = { err: err.status == 401 ? '登录过期，请重新登录！' : err.message, code: err.status || 403 };
+                console.error(err);
+                ctx.body = { message: err.status == 401 ? '登录过期，请重新登录！' : err.message, code: err.status || 403 };
             }
         }
     }

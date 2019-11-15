@@ -18,7 +18,7 @@ export const serverConfig = {
     prot: 3000,
     jwt: {
         secret: 'koa-demo',
-        path: [/^\/user\/login/],
+        path: [/^\/unToken/],
         expiresIn: '2h'
     },
     mogodb: {

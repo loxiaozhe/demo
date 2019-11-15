@@ -18,21 +18,37 @@ import { IndexMiddleware } from '../middleware';
  */
 export const routes = [
     {
-        path: '/user/findOne',
-        method: 'GET',
-        middleware: IndexMiddleware.userTokenMiddleware,
-        fn: controller.user.findUser
+        root: '/user',
+        routeList: [
+            {
+                path: '/findByMobile',
+                method: 'GET',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.user.findByMobile
+            },
+            {
+                path: '/create',
+                method: 'POST',
+                middleware: IndexMiddleware.nullMiddleware,
+                fn: controller.user.createUser
+            }
+        ]
     },
     {
-        path: '/user/create',
-        method: 'POST',
-        middleware: IndexMiddleware.nullMiddleware,
-        fn: controller.user.createUser
-    },
-    {
-        path: '/user/login',
-        method: 'POST',
-        middleware: IndexMiddleware.nullMiddleware,
-        fn: controller.user.login
+        root: '/unToken',
+        routeList: [
+            {
+                path: '/login',
+                method: 'POST',
+                middleware: IndexMiddleware.nullMiddleware,
+                fn: controller.user.login
+            },
+            {
+                path: '/findMobile',
+                method: 'GET',
+                middleware: IndexMiddleware.nullMiddleware,
+                fn: controller.unToken.findByMobile
+            }
+        ]
     }
 ];

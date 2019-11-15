@@ -24,12 +24,14 @@ export class HttpServer {
         const route = new Router();
         //注册路由
         routes.forEach((item) => {
-            if (item.method === 'GET') {
-                route.get(item.path, item.middleware, item.fn);
-            }
-            if (item.method === 'POST') {
-                route.post(item.path, item.middleware, item.fn);
-            }
+            item.routeList.forEach((routeNode) => {
+                if (routeNode.method === 'GET') {
+                    route.get(item.root + routeNode.path, routeNode.middleware, routeNode.fn);
+                }
+                if (routeNode.method === 'POST') {
+                    route.post(item.root + routeNode.path, routeNode.middleware, routeNode.fn);
+                }
+            });
         });
         //加载中间件
         app.use(bodyparser())

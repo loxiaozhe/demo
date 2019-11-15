@@ -7,29 +7,36 @@
  *
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
-import { utils } from '../util';
-import { model } from '../model';
 import { Document } from 'mongoose';
+import { model } from '../model';
+import { utils } from '../util';
 
 export class UserLogic {
     /**
-     * **获取用户**
+     * **查询**
      * @param {string} name 用户标识
-     * @returns {Promise<{ [name: string]: unknown }>} 实例：{"id": "ABC", "name": "张三","age": 10}
+     * @returns {Promise<Document>} 示例：{"name": "ABC", "pass": "123321","mobile": "18210294511"}
      */
-    async findUserByID(name: string): Promise<Document> {
-        return Promise.resolve(model.user.findOne({ name: name }));
+    async findByMobile(mobile: string): Promise<Document> {
+        return Promise.resolve(model.user.findOne({ mobile: mobile }));
     }
+    /**
+     * **注册**
+     * @param {string} user.pass 密码
+     * @param {string} user.mobile 手机号
+     * @param {string} user.name 姓名
+     * @returns {Promise<Document>} 示例：{"name": "ABC", "pass": "123321","mobile": "18210294511"}
+     */
     async createUser(user: unknown): Promise<Document> {
         return Promise.resolve(model.user.create(user));
     }
     /**
-     *
-     * @param {string} name 用户标识
-     * @param {string} pass 用户密码
+     ***登录**
+     * @param {string} mobile 手机号
+     * @param {string} pass 密码
      * @returns {Promise<{ [name: string]: unknown }>} 示例：{"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFCQyIsInBhc3MiOiIxMjM0NTYiLCJpYXQiOjE1NzM0NjIwOTEsImV4cCI6MTU3MzQ2MjExNn0.MoebgG-AbcaOH5rlxgbOSP0IMHkpmd_TGKs5wKzYV4k","success": true}
      */
-    async login(name: string, pass: string): Promise<{ [name: string]: unknown }> {
-        return Promise.resolve({ token: utils.getToken(name, pass), success: true });
+    async login(mobile: string, pass: string): Promise<{ [name: string]: unknown }> {
+        return Promise.resolve({ token: utils.getToken(mobile, pass), code: 200 });
     }
 }

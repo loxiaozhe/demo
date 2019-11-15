@@ -47,7 +47,8 @@ export const utils = Object.assign(
             return reg.test(value);
         },
         isPass(value: string): boolean {
-            const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@&%#_])[a-zA-Z0-9~!@&%#_]{6,10}$/;
+            //密码至少包含 数字和英文，长度6-20
+            const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/;
             return reg.test(value);
         }
     }
