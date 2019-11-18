@@ -9,7 +9,6 @@
  */
 import { sign, verify } from 'jsonwebtoken';
 import { serverConfig } from './config/serverConfig-dev';
-import { constants } from 'fs';
 export const utils = Object.assign(
     {},
     {
@@ -37,15 +36,32 @@ export const utils = Object.assign(
         parseToken(token: string): string | object {
             return verify(token.split(' ')[1], serverConfig.jwt.secret);
         },
+        /**
+         * **汉字校验**
+         * @param {string} value 字符串信息，必填
+         * @param {number} max 最大长度，必填
+         * @param {number} min 最小长度，选填
+         * @returns {boolean} true|false
+         */
         isHanzi(value: string, max: number, min?: number): boolean {
             const reg = /[\u4e00-\u9fa5]/;
             min = min ? 0 : min;
             return reg.test(value) && min < value.length && value.length < max;
         },
+        /**
+         * **手机号校验**
+         * @param {string} value 手机号文本信息
+         * @returns {boolean} true|false
+         */
         isMobile(value: string): boolean {
             const reg = /^1[3456789]\d{9}$/;
             return reg.test(value);
         },
+        /**
+         * **密码校验**
+         * @param {string} value 密码文本信息
+         * @returns {boolean} true|false
+         */
         isPass(value: string): boolean {
             //密码至少包含 数字和英文，长度6-20
             const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/;

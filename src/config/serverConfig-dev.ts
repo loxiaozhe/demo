@@ -19,7 +19,7 @@ export const serverConfig = {
     jwt: {
         secret: 'koa-demo',
         path: [/^\/unToken/],
-        expiresIn: '2h'
+        expiresIn: '5s'
     },
     mogodb: {
         uri: 'mongodb://47.96.254.45:27017/ygwDB',

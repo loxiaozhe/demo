@@ -9,7 +9,6 @@
  */
 import { Context } from 'koa';
 import { utils } from '../util';
-import { prop } from '@typegoose/typegoose';
 
 export class IndexMiddleware {
     /**
@@ -22,16 +21,19 @@ export class IndexMiddleware {
         try {
             await next();
         } catch (err) {
+            console.error(err);
             if (err.name === 'ValidationError') {
+                //err.name === 'ValidationError',数据库字段验证失败
                 err.message = [];
                 for (let item of Object.keys(err.errors)) {
                     err.message.push(err.errors[item].message);
                 }
-                console.error(err);
                 ctx.body = { message: err.message, code: err.status || 403 };
+            } else if (err.name === 'UnauthorizedError') {
+                //err.name==='UnauthorizedError',token验证失败
+                ctx.body = { message: '登录过期，请重新登录！', code: err.status };
             } else {
-                console.error(err);
-                ctx.body = { message: err.status == 401 ? '登录过期，请重新登录！' : err.message, code: err.status || 403 };
+                ctx.body = { message: err.message, code: err.status || 403 };
             }
         }
     }
@@ -44,9 +46,14 @@ export class IndexMiddleware {
     static async userTokenMiddleware(ctx: Context, next: () => Promise<any>): Promise<void> {
         if (ctx.header && ctx.header.authorization) {
             const token = ctx.header.authorization;
+            //如果JWT设置passthrough: true(允许无效的的token信息)，这里解析token需要进行try catch
+            // try {
             const user = utils.parseToken(token);
             ctx.user = user;
             await next();
+            // } catch (error) {
+            //     throw new Error('登录超时，请重新登录！');
+            // }
         } else {
             throw new Error('未登录');
         }

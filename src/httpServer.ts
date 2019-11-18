@@ -36,6 +36,8 @@ export class HttpServer {
         //加载中间件
         app.use(bodyparser())
             .use(IndexMiddleware.errorMiddleware)
+            //JWT设置passthrough: true(允许无效的的token信息)
+            // .use(Jwt({ secret: serverConfig.jwt.secret, passthrough: true }).unless({ path: serverConfig.jwt.path }))
             .use(Jwt({ secret: serverConfig.jwt.secret }).unless({ path: serverConfig.jwt.path }))
             .use(route.routes())
             .use(route.allowedMethods());

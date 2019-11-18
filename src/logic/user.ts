@@ -14,7 +14,7 @@ import { utils } from '../util';
 export class UserLogic {
     /**
      * **查询**
-     * @param {string} name 用户标识
+     * @param {string} mobile 手机号
      * @returns {Promise<Document>} 示例：{"name": "ABC", "pass": "123321","mobile": "18210294511"}
      */
     async findByMobile(mobile: string): Promise<Document> {
