@@ -9,6 +9,7 @@
  */
 import { Context } from 'koa';
 import { utils } from '../util';
+import { model } from '../model';
 
 export class IndexMiddleware {
     /**
@@ -28,12 +29,12 @@ export class IndexMiddleware {
                 for (let item of Object.keys(err.errors)) {
                     err.message.push(err.errors[item].message);
                 }
-                ctx.body = { message: err.message, code: err.status || 403 };
+                ctx.throw(err.message, 400);
             } else if (err.name === 'UnauthorizedError') {
                 //err.name==='UnauthorizedError',token验证失败
-                ctx.body = { message: '登录过期，请重新登录！', code: err.status };
+                ctx.throw('登录过期，请重新登录！', 401);
             } else {
-                ctx.body = { message: err.message, code: err.status || 403 };
+                ctx.throw(err.message, 400);
             }
         }
     }
@@ -50,13 +51,25 @@ export class IndexMiddleware {
             // try {
             const user = utils.parseToken(token);
             ctx.user = user;
-            await next();
             // } catch (error) {
             //     throw new Error('登录超时，请重新登录！');
             // }
         } else {
-            throw new Error('未登录');
+            throw new Error('请确认是否未登录系统');
         }
+        const { userNmae } = ctx.request.body || ctx.request.query;
+        if (userNmae) {
+            try {
+                const user = model.user.findOne({ userNmae: userNmae });
+                if (!user) {
+                    throw new Error('该用户不存在');
+                }
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+        }
+        await next();
     }
     /**
      * **null中间件**

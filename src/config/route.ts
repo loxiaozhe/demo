@@ -12,40 +12,99 @@ import { IndexMiddleware } from '../middleware';
 /**
  * **routes数组定义说明**
  * @param {string} path 请求地址
- * @param {string} method 请求方式
+ * @param {string} methods 请求方式 例如：'POST,GET'
  * @param {Function} fn 业务函数
  * @param {Function} middleware 中间件
  */
 export const routes = [
     {
+        root: '/unToken',
+        routeList: [
+            {
+                path: '/login',
+                methods: 'POST',
+                middleware: IndexMiddleware.nullMiddleware,
+                fn: controller.user.login
+            },
+            {
+                path: '/getCode',
+                methods: 'GET',
+                middleware: IndexMiddleware.nullMiddleware,
+                fn: controller.user.getCode
+            },
+            {
+                path: '/findMobile',
+                methods: 'GET',
+                middleware: IndexMiddleware.nullMiddleware,
+                fn: controller.unToken.findByMobile
+            }
+        ]
+    },
+    {
         root: '/user',
         routeList: [
             {
+                path: '/logout',
+                methods: 'POST',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.user.logout
+            },
+            {
+                path: '/modifyPassword',
+                methods: 'POST',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.user.modifyPassword
+            },
+            {
+                path: '/bindMail',
+                methods: 'POST',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.user.modifyMail
+            },
+            {
+                path: '/modifyMail',
+                methods: 'POST',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.user.modifyMail
+            },
+            {
+                path: '/bindWarning',
+                methods: 'POST',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.user.bindWarning
+            },
+            {
                 path: '/findByMobile',
-                method: 'GET',
+                methods: 'GET',
                 middleware: IndexMiddleware.userTokenMiddleware,
                 fn: controller.user.findByMobile
             },
             {
                 path: '/create',
-                method: 'POST',
+                methods: 'POST',
                 middleware: IndexMiddleware.nullMiddleware,
                 fn: controller.user.createUser
             }
         ]
     },
     {
-        root: '/unToken',
+        root: '/statistics',
         routeList: [
             {
-                path: '/login',
-                method: 'POST',
+                path: '/getData',
+                methods: 'GET',
                 middleware: IndexMiddleware.nullMiddleware,
-                fn: controller.user.login
+                fn: controller.statistics.getData
+            },
+            {
+                path: '/getWeekData',
+                methods: 'GET',
+                middleware: IndexMiddleware.nullMiddleware,
+                fn: controller.statistics.getWeekData
             },
             {
                 path: '/findMobile',
-                method: 'GET',
+                methods: 'GET',
                 middleware: IndexMiddleware.nullMiddleware,
                 fn: controller.unToken.findByMobile
             }

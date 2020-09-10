@@ -3,7 +3,7 @@
  * Use of this source that is governed by a Apache-style
  * license that can be found in the LICENSE file.
  *
- * 描述：UnToken类，不需要token的功能业务
+ * 描述：UnTokenController不需要token的功能业务
  *
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
@@ -21,7 +21,13 @@ export class UnTokenController {
         const { mobile } = ctx.request.body;
         //校验参数
         if (utils.isMobile(mobile)) {
-            const user = await logic.user.findByMobile(mobile);
+            let user;
+            try {
+                user = await logic.user.findByMobile(mobile, ['mobile']);
+            } catch (error) {
+                console.error(error);
+                throw new Error('数据操作异常');
+            }
             if (user) {
                 throw new Error('手机号已存在');
             }

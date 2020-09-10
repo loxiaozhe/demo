@@ -7,10 +7,12 @@
  *
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
-import { UserLogic } from '../logic/user';
+import { UserLogic } from './user';
+import { StatisticsLogic } from './statistics';
 /**
  * @summary logic配置所有的业务层，处理具体业务
  */
 export const logic = {
-    user: new UserLogic()
+    user: new UserLogic(),
+    statistics: new StatisticsLogic()
 };

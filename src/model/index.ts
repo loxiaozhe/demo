@@ -8,6 +8,8 @@
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
 import { UserModel } from './user';
+import { StatisticsModel } from './statistics';
 export const model = {
-    user: UserModel
+    user: UserModel,
+    statistics: StatisticsModel
 };

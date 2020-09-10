@@ -7,12 +7,14 @@
  *
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
-import { UserController } from '../controller/user';
+import { UserController } from './user';
 import { UnTokenController } from './unToken';
+import { StatisticsController } from './statistics';
 /**
  * @summary controller配置所有的控制器，处理具体业务
  */
 export const controller = {
     user: new UserController(),
-    unToken: new UnTokenController()
+    unToken: new UnTokenController(),
+    statistics: new StatisticsController()
 };

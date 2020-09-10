@@ -10,7 +10,7 @@
 import * as mongoose from 'mongoose';
 import { serverConfig } from './config/serverConfig-dev';
 export class DB {
-    static connect() {
+    static async connect(): Promise<mongoose.Connection> {
         mongoose.connect(serverConfig.mogodb.uri, {
             user: serverConfig.mogodb.user,
             pass: serverConfig.mogodb.pass,
@@ -21,15 +21,13 @@ export class DB {
 
         // 连接错误
         mongoose.connection.on('error', (error) => {
-            console.warn('数据库连接失败!', error);
+            console.warn(`数据库连接失败:${serverConfig.mogodb.uri};message:${error.message}`);
+            process.exit(1);
         });
 
         // 连接成功
-        mongoose.connection.once('open', () => {
+        return mongoose.connection.once('open', () => {
             console.log('数据库连接成功!');
         });
-
-        // 返回实例
-        return mongoose;
     }
 }

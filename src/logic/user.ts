@@ -3,7 +3,7 @@
  * Use of this source that is governed by a Apache-style
  * license that can be found in the LICENSE file.
  *
- * 描述：User类，处理用户逻辑
+ * 描述：UserLogic处理用户逻辑
  *
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
@@ -12,13 +12,37 @@ import { model } from '../model';
 import { utils } from '../util';
 
 export class UserLogic {
+    static fields = ['userName', 'password', 'email', 'userID', 'domain', 'warning', 'isEnable', 'name', 'mobile', 'permission'];
+    // static fields = ['userName', 'password', 'email'];
     /**
      * **查询**
-     * @param {string} mobile 手机号
-     * @returns {Promise<Document>} 示例：{"name": "ABC", "pass": "123321","mobile": "18210294511"}
+     * @param {string} userName 用户名
+     * @param {Array} fields 返回字段
+     * @returns {Promise<Document>} 示例：
+     * {"_id":"5b50091c30d72c3ee39f7974","userName":"ucapManager",
+     * "password":"50e574365268f9ad3ab75f864c384678","email":"wangyq@ucap.com.cn",
+     * "userID":"ac0b2cbf32f411aa66678a61a3a494b4","domain":"ucap","warning":"1",
+     * "isEnable":true,"name":"系统管理员","mobile":"","permission":[]}}
      */
-    async findByMobile(mobile: string): Promise<Document> {
-        return Promise.resolve(model.user.findOne({ mobile: mobile }));
+    async findByUserName(userName: string, flag?: boolean, fields?: [string]): Promise<Document> {
+        let user = null;
+        try {
+            if (Array.isArray(fields) && fields.length > 0) {
+                user = await Promise.resolve(model.user.findOne({ userName: userName }, fields));
+            } else if (typeof flag === 'boolean' && flag == true) {
+                user = await Promise.resolve(model.user.findOne({ userName: userName }, UserLogic.fields));
+            } else {
+                user = await Promise.resolve(model.user.findOne({ userName: userName }));
+            }
+        } catch (error) {
+            console.error(error);
+            throw new Error('数据操作异常');
+        }
+
+        if (!user.isEnable) {
+            throw new Error('账户已停用');
+        }
+        return user;
     }
     /**
      * **注册**
@@ -28,15 +52,81 @@ export class UserLogic {
      * @returns {Promise<Document>} 示例：{"name": "ABC", "pass": "123321","mobile": "18210294511"}
      */
     async createUser(user: unknown): Promise<Document> {
-        return Promise.resolve(model.user.create(user));
+        return await model.user.create(user);
     }
     /**
      ***登录**
-     * @param {string} mobile 手机号
-     * @param {string} pass 密码
-     * @returns {Promise<{ [name: string]: unknown }>} 示例：{"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFCQyIsInBhc3MiOiIxMjM0NTYiLCJpYXQiOjE1NzM0NjIwOTEsImV4cCI6MTU3MzQ2MjExNn0.MoebgG-AbcaOH5rlxgbOSP0IMHkpmd_TGKs5wKzYV4k","success": true}
+     * @param {string} user.userName 用户名
+     * @param {string} user.password 密码
+     * @returns {Promise<{ [name: string]: unknown }>} 示例：
+     * {"token":"eyJhbGc****HZ2ETX9VRrPa8",
+     * "user":{"_id":"5b50091c30d72c3ee39f7974","userName":"ucapManager",
+     * "password":"50e574365268f9ad3ab75f864c384678","email":"wangyq@ucap.com.cn",
+     * "userID":"ac0b2cbf32f411aa66678a61a3a494b4","domain":"ucap","warning":"1",
+     * "isEnable":true,"name":"系统管理员","mobile":"","permission":[]}}
      */
-    async login(mobile: string, pass: string): Promise<{ [name: string]: unknown }> {
-        return Promise.resolve({ token: utils.getToken(mobile, pass), code: 200 });
+    async login(user: any): Promise<{ token: string; user: any }> {
+        return { token: utils.getToken(user.userName, user.password), user: user };
+    }
+
+    /**
+     ***修改密码**
+     * @param {string} userName 用户名
+     * @param {string} aginPassword 新密码
+     * @returns {Promise<void>}
+     */
+    async modifyPassword(userName: string, aginPassword: string): Promise<void> {
+        const conditions = { userName: userName },
+            doc = { $set: { password: aginPassword } };
+        try {
+            model.user.updateOne(conditions, doc);
+        } catch (error) {
+            console.error(error);
+            throw new Error('数据操作异常');
+        }
+    }
+    /**
+     ***修改邮箱**
+     * @param {string} userName 用户名
+     * @param {string} email 新邮箱
+     * @returns {Promise<void>}
+     */
+    async modifyMail(userName: string, email: string): Promise<void> {
+        const conditions = { userName: userName },
+            doc = { $set: { email: email } };
+        try {
+            model.user.updateOne(conditions, doc);
+        } catch (error) {
+            console.error(error);
+            throw new Error('数据操作异常');
+        }
+    }
+    /**
+     ***修改用户信息**
+     * @param {string} conditions.userName 用户名
+     * @param {string} doc.$set 修改的字段内容
+     * @returns {Promise<void>}
+     */
+    async modifyUserInfo(conditions: any, doc: any): Promise<void> {
+        try {
+            model.user.updateOne(conditions, doc);
+        } catch (error) {
+            console.error(error);
+            throw new Error('数据操作异常');
+        }
+    }
+
+    /**
+     ***修改用户信息**
+     * @param {string} conditions.userName 用户名
+     * @param {string} doc.$set 修改的字段内容
+     * @returns {Promise<void>}
+     */
+    async findByMobile(mobile: string, fields?: string[]): Promise<Document> {
+        try {
+            return model.user.findOne({ mobile: mobile }, fields);
+        } catch (error) {
+            throw error;
+        }
     }
 }

@@ -2,7 +2,7 @@
     "version": "1.8.0",
     "compilerOptions": {
         "typeRoots" : ["./typings"],
-        "outDir": "dist",
+        "outDir": "demoBack",
         "rootDir": "src",
         "lib": [ "es5" ],
         "target": "ES5",

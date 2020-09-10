@@ -14,6 +14,52 @@ class User {
         required: true,
         validate: [
             {
+                validator: (val) => utils.isUserName(val),
+                message: `userName:{VALUE},必须包含数字和字母，且长度为6到20位`
+            }
+        ]
+    })
+    userName: string;
+    @prop({
+        required: true,
+        validate: [
+            {
+                validator: (val) => utils.isPass(val),
+                message: `pass:{VALUE},必须包含数字和字母，且长度为32位`
+            }
+        ]
+    })
+    passWord: string;
+    @prop({
+        required: true,
+        validate: [
+            {
+                validator: (val) => utils.isEmail(val),
+                message: `email:{VALUE},邮箱格式不正确`
+            }
+        ]
+    })
+    email: string;
+    @prop({
+        required: true
+    })
+    userID: string;
+    @prop({
+        required: true
+    })
+    domain: string;
+    @prop({
+        required: true
+    })
+    warning: string;
+    @prop({
+        required: true
+    })
+    isEnable: boolean;
+    @prop({
+        required: true,
+        validate: [
+            {
                 validator: (val) => utils.isHanzi(val, 4, 2),
                 message: `name:{VALUE},不满足2-4个汉字`
             }
@@ -24,21 +70,19 @@ class User {
         required: true,
         validate: [
             {
-                validator: (val) => utils.isPass(val),
-                message: `pass:{VALUE},必须包含大小写字母，特殊字符，且长度为8到16位`
-            }
-        ]
-    })
-    pass: string;
-    @prop({
-        required: true,
-        validate: [
-            {
                 validator: (val) => utils.isMobile(val),
                 message: `mobile:{VALUE},不满足手机号格式`
             }
         ]
     })
     mobile: string;
+    @prop({
+        required: true
+    })
+    permission: any;
+    @prop({
+        required: true
+    })
+    createDate: string;
 }
 export const UserModel = getModelForClass(User);
