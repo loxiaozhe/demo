@@ -9,9 +9,10 @@
  */
 import { sign, verify } from 'jsonwebtoken';
 import * as svg from 'svg-captcha';
+import * as lodash from 'lodash';
 import { serverConfig } from './config/serverConfig-dev';
 export const utils = Object.assign(
-    {},
+    { _: lodash },
     {
         /**
          * **获取token**

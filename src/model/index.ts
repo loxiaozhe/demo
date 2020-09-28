@@ -9,7 +9,9 @@
  */
 import { UserModel } from './user';
 import { StatisticsModel } from './statistics';
+import { TaskLogModel } from './taskLog';
 export const model = {
     user: UserModel,
-    statistics: StatisticsModel
+    statistics: StatisticsModel,
+    taskLog: TaskLogModel
 };

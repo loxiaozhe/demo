@@ -10,11 +10,13 @@
 import { UserController } from './user';
 import { UnTokenController } from './unToken';
 import { StatisticsController } from './statistics';
+import { ServiceController } from './service';
 /**
  * @summary controller配置所有的控制器，处理具体业务
  */
 export const controller = {
     user: new UserController(),
     unToken: new UnTokenController(),
-    statistics: new StatisticsController()
+    statistics: new StatisticsController(),
+    service: new ServiceController()
 };

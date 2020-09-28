@@ -7,8 +7,11 @@
  *
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
-import { prop, getModelForClass } from '@typegoose/typegoose';
+import { prop, index, getModelForClass } from '@typegoose/typegoose';
 import { utils } from '../util';
+//创建库表索引
+@index({ userID: 1 })
+@index({ userName: 1 })
 class User {
     @prop({
         required: true,

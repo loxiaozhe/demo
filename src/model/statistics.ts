@@ -7,7 +7,7 @@
  *
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
-import { prop, getModelForClass } from '@typegoose/typegoose';
+import { index, prop, getModelForClass } from '@typegoose/typegoose';
 class Statistics {
     @prop({
         required: true

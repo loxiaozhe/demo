@@ -101,12 +101,29 @@ export const routes = [
                 methods: 'GET',
                 middleware: IndexMiddleware.nullMiddleware,
                 fn: controller.statistics.getWeekData
+            }
+        ]
+    },
+    {
+        root: '/service',
+        routeList: [
+            {
+                path: '/getTaskLogList',
+                methods: 'POST',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.service.getTaskLogList
             },
             {
-                path: '/findMobile',
-                methods: 'GET',
-                middleware: IndexMiddleware.nullMiddleware,
-                fn: controller.unToken.findByMobile
+                path: '/getTaskLogInfo',
+                methods: 'POST',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.service.getTaskLogInfo
+            },
+            {
+                path: '/deleteLog',
+                methods: 'post',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.service.deleteLog
             }
         ]
     }

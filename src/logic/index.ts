@@ -9,10 +9,12 @@
  */
 import { UserLogic } from './user';
 import { StatisticsLogic } from './statistics';
+import { ServiceLogic } from './service';
 /**
  * @summary logic配置所有的业务层，处理具体业务
  */
 export const logic = {
     user: new UserLogic(),
-    statistics: new StatisticsLogic()
+    statistics: new StatisticsLogic(),
+    service: new ServiceLogic()
 };

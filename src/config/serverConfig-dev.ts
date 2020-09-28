@@ -19,7 +19,7 @@ export const serverConfig = {
     jwt: {
         secret: 'backSystem',
         path: [/^\/unToken/],
-        expiresIn: '500s'
+        expiresIn: '1h'
     },
     mogodb: {
         uri: 'mongodb://47.96.254.45:27017/ygwDB',
