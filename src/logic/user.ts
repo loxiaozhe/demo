@@ -12,7 +12,7 @@ import { model } from '../model';
 import { utils } from '../util';
 
 export class UserLogic {
-    static fields = ['userName', 'password', 'email', 'userID', 'domain', 'warning', 'isEnable', 'name', 'mobile', 'permission'];
+    static fields = ['userName', 'password', 'email', 'userID', 'warning', 'isEnable', 'name', 'mobile', 'permission'];
     // static fields = ['userName', 'password', 'email'];
     /**
      * **查询**
@@ -36,7 +36,7 @@ export class UserLogic {
             }
         } catch (error) {
             console.error(error);
-            throw new Error('数据操作异常');
+            throw new Error('查询用户，数据操作异常');
         }
 
         if (!user.isEnable) {
@@ -45,14 +45,19 @@ export class UserLogic {
         return user;
     }
     /**
-     * **注册**
+     * **创建后台用户**
      * @param {string} user.pass 密码
      * @param {string} user.mobile 手机号
      * @param {string} user.name 姓名
-     * @returns {Promise<Document>} 示例：{"name": "ABC", "pass": "123321","mobile": "18210294511"}
+     * @returns {Promise<Document>} 示例：{"name": "manager", "passWord": "123321","mobile": "18210294511","userName":"ucap","permission":[],"email":"ucap@ucap.com.cn"}
      */
-    async createUser(user: unknown): Promise<Document> {
-        return await model.user.create(user);
+    async createSystemUser(user: any): Promise<Document> {
+        try {
+            return await model.user.create(user);
+        } catch (error) {
+            console.error(error);
+            throw new Error('添加后台用户，数据操作异常');
+        }
     }
     /**
      ***登录**
@@ -82,7 +87,7 @@ export class UserLogic {
             model.user.updateOne(conditions, doc);
         } catch (error) {
             console.error(error);
-            throw new Error('数据操作异常');
+            throw new Error('修改密码，数据操作异常');
         }
     }
     /**
@@ -98,7 +103,7 @@ export class UserLogic {
             model.user.updateOne(conditions, doc);
         } catch (error) {
             console.error(error);
-            throw new Error('数据操作异常');
+            throw new Error('修改邮箱，数据操作异常');
         }
     }
     /**
@@ -112,21 +117,40 @@ export class UserLogic {
             model.user.updateOne(conditions, doc);
         } catch (error) {
             console.error(error);
-            throw new Error('数据操作异常');
+            throw new Error('修改后台用户信息，数据操作异常');
         }
     }
 
     /**
-     ***修改用户信息**
-     * @param {string} conditions.userName 用户名
-     * @param {string} doc.$set 修改的字段内容
-     * @returns {Promise<void>}
+     ***后台用户列表**
+     * @param {Object} query 查询条件
+     * @param {Object} sort 排序条件
+     * @param {number} skip 分页条件
+     * @param {number} limit 分页条数
+     * @returns {Promise<{userList:any,count:number}>}
      */
-    async findByMobile(mobile: string, fields?: string[]): Promise<Document> {
+    async findSystemUser(
+        query: any,
+        sort: any,
+        skip: number,
+        limit: number
+    ): Promise<{
+        userList: (Document)[];
+        count: number;
+    }> {
         try {
-            return model.user.findOne({ mobile: mobile }, fields);
+            const userList = await Promise.resolve(
+                model.user
+                    .find(query)
+                    .sort(sort)
+                    .limit(limit)
+                    .skip(skip)
+            );
+            const count = await Promise.resolve(model.taskLog.countDocuments(query));
+            return { userList, count };
         } catch (error) {
-            throw error;
+            console.error(error);
+            throw new Error('后台用户列表，数据操作异常');
         }
     }
 }

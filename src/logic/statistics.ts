@@ -10,6 +10,7 @@
 import { Document } from 'mongoose';
 import * as moment from 'moment';
 import { model } from '../model';
+import { utils } from '../util';
 
 export class StatisticsLogic {
     /**
@@ -66,21 +67,25 @@ export class StatisticsLogic {
         let callTaskSuccessArr: number[] = [],
             callTaskFailArr: number[] = [],
             successRateArr: number[] = [];
-        dataList.forEach((item) => {
-            originNumArr.push(item.originNum);
-            serviceNumArr.push(item.serviceNum);
-            callTaskSuccessArr.push(item.callTaskSuccess || 0);
-            callTaskFailArr.push(item.callTaskFail || 0);
-            successRateArr.push(item.successRate || 0);
-            timeArr.push(item.createTime.split('-')[1] + '/' + item.createTime.split('-')[2]);
-        });
-        return {
-            originNum: originNumArr,
-            serviceNum: serviceNumArr,
-            callTaskSuccessArr: callTaskSuccessArr,
-            callTaskFailArr: callTaskFailArr,
-            successRateArr: successRateArr,
-            timeArr: timeArr
-        };
+        if (utils._.isArray(dataList) && !utils._.isEmpty(dataList)) {
+            dataList.forEach((item) => {
+                originNumArr.push(item.originNum);
+                serviceNumArr.push(item.serviceNum);
+                callTaskSuccessArr.push(item.callTaskSuccess || 0);
+                callTaskFailArr.push(item.callTaskFail || 0);
+                successRateArr.push(item.successRate || 0);
+                timeArr.push(item.createTime.split('-')[1] + '/' + item.createTime.split('-')[2]);
+            });
+            return {
+                originNum: originNumArr,
+                serviceNum: serviceNumArr,
+                callTaskSuccessArr: callTaskSuccessArr,
+                callTaskFailArr: callTaskFailArr,
+                successRateArr: successRateArr,
+                timeArr: timeArr
+            };
+        } else {
+            return null;
+        }
     }
 }

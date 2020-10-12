@@ -18,20 +18,8 @@ export class StatisticsController {
     async getData(ctx: Context): Promise<void> {
         try {
             const data = await logic.statistics.getData();
-            ctx.body = { data: data };
-        } catch (error) {
-            throw error;
-        }
-    }
-    /**
-     * **获取一周的统计监控数据**
-     * @param ctx 上下文
-     * @returns {Promise<void>}
-     */
-    async getWeekData(ctx: Context): Promise<void> {
-        try {
-            const data = await logic.statistics.getWeekData();
-            ctx.body = { data: data };
+            const weekData = await logic.statistics.getWeekData();
+            ctx.body = { data: data, weekData: weekData };
         } catch (error) {
             throw error;
         }

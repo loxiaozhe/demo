@@ -10,6 +10,7 @@
 import { Context } from 'koa';
 import { utils } from '../util';
 import { logic } from '../logic';
+import { ChangeStream } from 'mongodb';
 export class UserController {
     /**
      * **获取验证码**
@@ -156,24 +157,73 @@ export class UserController {
         }
     }
     /**
-     * **查询**
+     * **后台用户列表**
      * @param ctx 上下文
      * @returns {Promise<void>}
      */
-    async findByMobile(ctx: Context): Promise<void> {
+    async findSystemUser(ctx: Context): Promise<void> {
+        let data = {
+                sort: ctx.body.sort || { createDate: -1 },
+                skip: (ctx.body.page - 1) * ctx.body.rows || 0,
+                limit: ctx.body.rows || 10,
+                keyWords: ctx.body.keyWords || '',
+                isEnable: ctx.body.isEnable || '2',
+                startTime: ctx.body.startTime || '',
+                endTime: ctx.body.endTime || ''
+            },
+            query = {};
+        if (data.isEnable !== '2') {
+            query = utils._.extend({ isEnable: data.isEnable }, query);
+        }
+        if (!ctx.user && ctx.user.userName != 'ucap_manager') {
+            query = { userName: { $nin: ['ucap_manager'] } };
+        }
+        if (!utils._.isEmpty(data.keyWords)) {
+            query = utils._.extend({ $or: [{ userName: new RegExp(data.keyWords) }, { name: new RegExp(data.keyWords) }] }, query);
+        }
+        if (ctx.body.startTime && ctx.body.endTime) {
+            query = utils._.extend(
+                { $and: [{ createDate: { $gte: ctx.body.startTime } }, { createDate: { $lte: ctx.body.endTime } }] },
+                query
+            );
+        }
         try {
-            ctx.body = await logic.user.findByUserName(ctx.request.body.mobile);
+            ctx.body = await logic.user.findSystemUser(query, data.sort, data.skip, data.limit);
         } catch (error) {
             throw error;
         }
     }
     /**
-     * **注册**
+     * **添加后台用户**
      * @param ctx 上下文
      * @returns {Promise<void>}
      */
     async createUser(ctx: Context): Promise<void> {
-        const { name, pass, mobile } = ctx.request.body;
-        ctx.body = await logic.user.createUser({ name, pass, mobile });
+        const { userName, passWord, name, permission, email, mobile } = ctx.request.body;
+        if (!userName) {
+            throw new Error('用户名不能为空');
+        }
+        if (!passWord) {
+            throw new Error('密码不能为空');
+        }
+        if (!name) {
+            throw new Error('姓名不能为空');
+        }
+        if (!permission || (utils._.isArray(permission) && permission.length == 0)) {
+            throw new Error('权限不能为空');
+        }
+        if (!email) {
+            throw new Error('邮箱不能为空');
+        }
+        if (!mobile) {
+            throw new Error('手机号不能为空');
+        }
+        try {
+            const createUser = await logic.user.createSystemUser({ userName, name, passWord, mobile, permission, email });
+            console.log('添加用户' + createUser);
+            ctx.body = { msg: '用户添加成功' };
+        } catch (error) {
+            throw error;
+        }
     }
 }

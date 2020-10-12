@@ -4,6 +4,7 @@
   "description": "Node TypeScript Project",
   "main": "index.js",
   "dependencies": {
+    "@types/jsonwebtoken": "^8.3.5",
     "@typegoose/typegoose": "^6.1.2",
     "@types/koa": "^2.0.51",
     "@types/koa-bodyparser": "^4.3.0",
@@ -38,7 +39,6 @@
   },
   "devDependencies": {
     "@types/chai": "^4.2.7",
-    "@types/jsonwebtoken": "^8.3.5",
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "cz-conventional-changelog": "^3.0.2",

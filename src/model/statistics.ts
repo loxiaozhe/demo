@@ -10,91 +10,109 @@
 import { index, prop, getModelForClass } from '@typegoose/typegoose';
 class Statistics {
     @prop({
+        trim: true,
         required: true
     })
     userTotal: number;
 
     @prop({
+        trim: true,
         required: true
     })
     newUser: number;
 
     @prop({
+        trim: true,
         required: true
     })
     serviceTotal: number;
 
     @prop({
+        trim: true,
         required: true
     })
     newService: number;
 
     @prop({
+        trim: true,
         required: true
     })
     procureTotal: number;
 
     @prop({
+        trim: true,
         required: true
     })
     apiTotal: number;
 
     @prop({
+        trim: true,
         required: true
     })
     newApi: number;
 
     @prop({
+        trim: true,
         required: true
     })
     modifyApi: number;
 
     @prop({
+        trim: true,
         required: true
     })
     hotProcure: any;
 
     @prop({
+        trim: true,
         required: true
     })
     hotTem: any;
 
     @prop({
+        trim: true,
         required: true
     })
     originNum: number;
 
     @prop({
+        trim: true,
         required: true
     })
     serviceNum: number;
 
     @prop({
+        trim: true,
         required: true
     })
     useFor: any;
 
     @prop({
+        trim: true,
         required: true
     })
     createTime: string;
 
     @prop({
+        trim: true,
         required: true
     })
     callTaskSuccess: number;
 
     @prop({
+        trim: true,
         required: true
     })
     callTaskFail: number;
 
     @prop({
+        trim: true,
         required: true
     })
     successRate: number;
 
     @prop({
+        trim: true,
         required: true
     })
     hotTaskUser: any;

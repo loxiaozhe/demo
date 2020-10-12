@@ -54,11 +54,11 @@ export class ServiceController {
      * @param ctx 上下文
      * @returns {Promise<void>}
      */
-    async getTaskLogInfo(ctx: Context): Promise<void> {
-        const id = ctx.request.body.id || '';
+    async getLogDetail(ctx: Context): Promise<void> {
+        const id = ctx.params.id || '';
         if (id) {
             try {
-                const data = await logic.service.getTaskLogInfo(id);
+                const data = await logic.service.getLogDetail(id);
                 ctx.body = { data: data };
             } catch (error) {
                 throw error;

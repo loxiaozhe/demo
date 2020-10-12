@@ -12,34 +12,42 @@ import { prop, index, getModelForClass } from '@typegoose/typegoose';
 @index({ requestTime: 1 })
 class TaskLog {
     @prop({
+        trim: true,
         required: true
     })
     sessionId: string;
     @prop({
+        trim: true,
         required: true
     })
     serviceId: string;
     @prop({
+        trim: true,
         required: true
     })
     taskId: string;
     @prop({
+        trim: true,
         required: true
     })
     taskName: string;
     @prop({
+        trim: true,
         required: true
     })
     remoteAddr: string;
     @prop({
+        trim: true,
         required: true
     })
     requestTime: string;
     @prop({
+        trim: true,
         required: true
     })
     status: string;
     @prop({
+        trim: true,
         required: true
     })
     result: string;

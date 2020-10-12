@@ -8,6 +8,7 @@
  * @author yuangw<yuangw@ucap.com.cn>  2019-11
  */
 import { prop, index, getModelForClass } from '@typegoose/typegoose';
+import * as Moment from 'moment';
 import { utils } from '../util';
 //创建库表索引
 @index({ userID: 1 })
@@ -15,6 +16,7 @@ import { utils } from '../util';
 class User {
     @prop({
         required: true,
+        trim: true,
         validate: [
             {
                 validator: (val) => utils.isUserName(val),
@@ -25,6 +27,7 @@ class User {
     userName: string;
     @prop({
         required: true,
+        trim: true,
         validate: [
             {
                 validator: (val) => utils.isPass(val),
@@ -35,6 +38,7 @@ class User {
     passWord: string;
     @prop({
         required: true,
+        trim: true,
         validate: [
             {
                 validator: (val) => utils.isEmail(val),
@@ -44,22 +48,29 @@ class User {
     })
     email: string;
     @prop({
-        required: true
+        required: true,
+        trim: true
     })
     userID: string;
-    @prop({
+    /*  @prop({
+        trim:true,
         required: true
     })
-    domain: string;
+    domain: string; */
     @prop({
-        required: true
+        trim: true,
+        required: true,
+        default: ''
     })
     warning: string;
     @prop({
-        required: true
+        trim: true,
+        required: true,
+        default: '1' /* -1 停用 ，1 启用 */
     })
-    isEnable: boolean;
+    isEnable: string;
     @prop({
+        trim: true,
         required: true,
         validate: [
             {
@@ -70,6 +81,7 @@ class User {
     })
     name: string;
     @prop({
+        trim: true,
         required: true,
         validate: [
             {
@@ -80,11 +92,14 @@ class User {
     })
     mobile: string;
     @prop({
+        trim: true,
         required: true
     })
     permission: any;
     @prop({
-        required: true
+        trim: true,
+        required: true,
+        default: Moment().format('YYYY-MM-DD HH:MM:SS')
     })
     createDate: string;
 }

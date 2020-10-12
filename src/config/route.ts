@@ -74,16 +74,16 @@ export const routes = [
                 fn: controller.user.bindWarning
             },
             {
-                path: '/findByMobile',
-                methods: 'GET',
-                middleware: IndexMiddleware.userTokenMiddleware,
-                fn: controller.user.findByMobile
-            },
-            {
                 path: '/create',
                 methods: 'POST',
                 middleware: IndexMiddleware.nullMiddleware,
                 fn: controller.user.createUser
+            },
+            {
+                path: '/findSystemUser',
+                methods: 'GET',
+                middleware: IndexMiddleware.userTokenMiddleware,
+                fn: controller.user.findSystemUser
             }
         ]
     },
@@ -95,12 +95,6 @@ export const routes = [
                 methods: 'GET',
                 middleware: IndexMiddleware.nullMiddleware,
                 fn: controller.statistics.getData
-            },
-            {
-                path: '/getWeekData',
-                methods: 'GET',
-                middleware: IndexMiddleware.nullMiddleware,
-                fn: controller.statistics.getWeekData
             }
         ]
     },
@@ -114,10 +108,10 @@ export const routes = [
                 fn: controller.service.getTaskLogList
             },
             {
-                path: '/getTaskLogInfo',
-                methods: 'POST',
+                path: '/getLogDetail/:id',
+                methods: 'GET',
                 middleware: IndexMiddleware.userTokenMiddleware,
-                fn: controller.service.getTaskLogInfo
+                fn: controller.service.getLogDetail
             },
             {
                 path: '/deleteLog',

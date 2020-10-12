@@ -59,7 +59,7 @@ export class HttpServer {
             .use(IndexMiddleware.errorMiddleware) //error信息处理中间件
             //JWT设置passthrough: true(允许无效的的token信息)
             // .use(Jwt({ secret: serverConfig.jwt.secret, passthrough: true }).unless({ path: serverConfig.jwt.path }))
-            .use(Jwt({ secret: serverConfig.jwt.secret }).unless({ path: serverConfig.jwt.path })) //token校验中间件
+            .use(Jwt({ secret: serverConfig.jwt.secret }).unless({ path: serverConfig.jwt.path })) //对需要限制的资源请求进行检查
             .use(route.routes()) //路由中间件
             .use(route.allowedMethods());
         //连接数据库
